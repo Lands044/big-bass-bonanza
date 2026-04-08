@@ -558,6 +558,11 @@ $purple: #f8612a;
 			object-fit: contain;
 		}
 
+		@media (max-width:toEm($mobile)){
+			width: 90px;
+			height: 90px;
+		}
+
 		@keyframes spin-attention {
 			0% {
 				transform: rotate(0deg);
@@ -582,27 +587,6 @@ $purple: #f8612a;
 			100% {
 				transform: rotate(0deg);
 			}
-		}
-
-		@media (max-width: toEm($pc)) {
-			position: absolute;
-			top: -135%;
-			right: 3%;
-			box-shadow: 30px 10px 30px rgba(0, 0, 0, 0.5);
-		}
-
-		@media (max-width: toEm($tablet)) {
-			right: 3%;
-			top: -135%;
-		}
-
-		@media (max-width: toEm($mobile)) {
-			top: -20%;
-		}
-
-		@media (max-width: toEm($mobileSmall)) {
-			top: -30%;
-			right: 30px;
 		}
 	}
 
@@ -718,6 +702,26 @@ $purple: #f8612a;
 		span {
 			display: inline-block;
 		}
+
+		@media (max-width: toEm($pc)) {
+			position: absolute;
+			top: -135%;
+			right: 3%;
+		}
+
+		@media (max-width: toEm($tablet)) {
+			right: 3%;
+			top: -135%;
+		}
+
+		@media (max-width: toEm($mobile)) {
+			top: -20%;
+			gap: 5px;
+		}
+
+		@media (max-width: toEm($mobileSmall)) {
+			right: 15px;
+		}
 	}
 
 	&__minus,
@@ -727,8 +731,9 @@ $purple: #f8612a;
 		border-radius: 50%;
 		overflow: hidden;
 
-		@media (max-width: toEm($pc)) {
-			display: none;
+		@media (max-width: toEm($mobile)) {
+			width: 60px;
+			height: 60px;
 		}
 	}
 }
