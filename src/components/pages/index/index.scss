@@ -442,24 +442,24 @@ $purple: #f8612a;
 
 
 .menu {
+	font-family: "Arial Black", Arial, sans-serif;
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	width: 100%;
-	height: 90px;
+	height: 120px;
 	z-index: 10;
-	background-color: rgba(132, 5, 1, 0.8);
+	// background-color: rgba(0, 0, 0, 0.6);
 	color: #fff;
-	padding: 14px 0;
-	font-weight: 500;
-	font-size: 20px;
+	padding: 10px 0;
+	text-transform: uppercase;
 
-	@media (max-width:toEm($pc)) and (pointer: coarse){
+	@media (max-width: toEm($pc)) {
 		height: auto;
 	}
 
-	@media (max-width:toEm($mobile)) and (pointer: coarse){
-		padding: 0;
+	@media (max-width: toEm($mobileSmall)) {
+		height: 150px;
 	}
 
 	img {
@@ -472,50 +472,62 @@ $purple: #f8612a;
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
+
+		@media (max-width: toEm($pc)) {
+			width: 100%;
+			flex-direction: column;
+		}
 	}
 
 	&__left {
 		display: flex;
 		align-items: center;
-		gap: 40px;
+		justify-content: space-between;
+		gap: 20px;
 
-		@media (max-width:toEm($mobile)) and (pointer: coarse){
-			flex-direction: column;
-			gap: 10px; 
+		@media (max-width: toEm($pc)) {
+			width: 100%;
+			flex-direction: row-reverse;
+		}
+
+		@media (max-width: toEm($mobileSmall)) {
 			align-items: flex-end;
 		}
 	}
 
-	&__wrap {
+	&__wrap-icon {
 		display: flex;
-		align-items: flex-start;
-		flex-direction: column;
+		align-items: center;
 		justify-content: center;
+	}
 
-		@media (max-width:toEm($mobile)) and (pointer: coarse){
+	&__column {
+		display: flex;
+		flex-direction: column;
+
+		@media (max-width: toEm($pc)) {
 			flex-direction: row;
-			align-items: center;
-			gap: 5px;
-			position: absolute;
-			top: -50%;
-			left: 0;
+		}
+
+		@media (max-width: toEm($mobile)) {
+			flex-direction: column;
+		}
+
+		@media (max-width: toEm($mobileSmall)) {
+			flex-direction: row;
 		}
 	}
 
-	&__items {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-	}
-
-	&__settings,
-	&__sound {
+	&__sound,
+	&__button-spin,
+	&__minus,
+	&__plus {
 		width: 40px;
 		height: 40px;
 		transition: all 0.3s ease;
 		position: relative;
 
-		@media (max-width:toEm($mobile)) and (pointer: coarse){
+		@media (max-width: toEm($pc)) {
 			width: 60px;
 			height: 60px;
 		}
@@ -529,6 +541,88 @@ $purple: #f8612a;
 		}
 	}
 
+	// button spin with animation
+	&__button-spin {
+		padding: 8px 2px 2px 2px;
+		width: 110px;
+		height: 110px;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			animation: spin-attention 5s ease-in-out infinite;
+			transform-origin: center;
+			object-fit: contain;
+		}
+
+		@keyframes spin-attention {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			10% {
+				transform: rotate(20deg);
+			}
+
+			20% {
+				transform: rotate(-15deg);
+			}
+
+			30% {
+				transform: rotate(10deg);
+			}
+
+			40% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(0deg);
+			}
+		}
+
+		@media (max-width: toEm($pc)) {
+			position: absolute;
+			top: -135%;
+			right: 3%;
+			box-shadow: 30px 10px 30px rgba(0, 0, 0, 0.5);
+		}
+
+		@media (max-width: toEm($tablet)) {
+			right: 3%;
+			top: -135%;
+		}
+
+		@media (max-width: toEm($mobile)) {
+			top: -20%;
+		}
+
+		@media (max-width: toEm($mobileSmall)) {
+			top: -30%;
+			right: 30px;
+		}
+	}
+
+	// disable state for button spin
+	&__button-spin.disabled {
+		pointer-events: none;
+		opacity: 0.6;
+		filter: grayscale(1);
+
+		img {
+			animation-play-state: paused;
+			// filter: grayscale(1);
+		}
+	}
+
+	&__sound {
+		width: 60px;
+		height: 60px;
+	}
+
 	&__sound {
 		&.sound-off {
 			opacity: 0.5;
@@ -537,7 +631,7 @@ $purple: #f8612a;
 			// Додаємо перекреслення (хрестик)
 			&::before,
 			&::after {
-				content: '';
+				content: "";
 				position: absolute;
 				top: 50%;
 				left: 50%;
@@ -563,67 +657,55 @@ $purple: #f8612a;
 		}
 	}
 
-	&__info {
-		display: flex;
-		gap: 5px;
+	&__credit,
+	&__bet {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		font-weight: 700;
+		font-size: 20px;
+		line-height: 120%;
+
+		@media (max-width: toEm($mobile)) {
+			grid-template-columns: 1fr;
+			gap: 4px;
+		}
 
 		span {
-			display: inline;
+			text-align: right;
+			color: yellow;
+
+			@media (max-width: toEm($mobile)) {
+				text-align: left;
+			}
 		}
+	}
+
+	&__value-all,
+	&__value-win {
+		width: 110px;
 	}
 
 	&__bet {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
-	}
-
-	&__credit {
-		padding: 15px 20px;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.2);
-		display: flex;
-		flex-direction: column;
-
-		p {
-			white-space: nowrap;
-			display: inline-block;
-		}
-
-		&-wrap {
-			margin-top: 10px;
-			display: flex;
-			gap: 4px;
+		@media (max-width: toEm($mobile)) {
+			margin-top: 15px;
 		}
 	}
 
-	&__arrows {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
+	&__title {
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 120%;
 
-	&__button-arrow {
-		width: 40px;
-		height: 40px;
-		padding: 2px;
-		background-color: rgba(0, 0, 0, 0.2);
-
-		&.bottom {
-			transform: rotate(180deg);
-		}
-
-		img {
-			width: 100%;
-			height: 100%;
+		@media (max-width: toEm($pc)) {
+			display: none;
 		}
 	}
 
 	&__right {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		gap: 15px;
 		transition: opacity 0.3s ease;
 
@@ -636,43 +718,17 @@ $purple: #f8612a;
 		span {
 			display: inline-block;
 		}
-
-		@media (max-width:toEm($mobileM)) and (pointer: coarse){
-			gap: 0;
-		}
 	}
 
-	&__button-auto,
-	&__button-spin {
-		transition: opacity 0.3s ease, filter 0.3s ease;
+	&__minus,
+	&__plus {
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		overflow: hidden;
 
-		&.disabled {
-			opacity: 0.5;
-			filter: grayscale(0.5);
-			pointer-events: none;
-		}
-	}
-
-	&__button-auto {
-		width: 70px;
-		height: 70px;
-
-		@media (max-width:toEm($mobileSmall)) and (pointer: coarse){
-			width: 35px;
-			height: 35px;
-		}
-	}
-
-	&__button-spin {
-		width: 90px;
-		height: 90px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		@media (max-width:toEm($mobile)) and (pointer: coarse){
-			width: 100px;
-			height: 100px;
+		@media (max-width: toEm($pc)) {
+			display: none;
 		}
 	}
 }

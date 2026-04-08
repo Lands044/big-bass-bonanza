@@ -12,13 +12,14 @@ class SlotMachine {
 
 		// Кнопки
 		this.spinButton = document.querySelector('.menu__button-spin');
-		this.autoButton = document.querySelector('.menu__button-auto');
+		this.autoButton = null;
 		this.soundButton = document.querySelector('.menu__sound');
-		this.arrowButtons = document.querySelectorAll('.menu__button-arrow');
+		this.minusButton = document.querySelector('.menu__minus');
+		this.plusButton = document.querySelector('.menu__plus');
 
 		// Елементи UI
-		this.balanceElement = document.querySelector('.menu__info .number');
-		this.betElement = document.querySelector('.menu__credit .number');
+		this.balanceElement = document.querySelector('.menu__value-all');
+		this.betElement = document.querySelector('.menu__value-win');
 
 		// Стан гри
 		this.spinCount = 0;
@@ -204,28 +205,26 @@ class SlotMachine {
 			this.handleSpin();
 		});
 
-		this.autoButton.addEventListener('click', (e) => {
-			e.preventDefault();
-			this.handleSpin();
-		});
-
 		// Обробник кнопки звуку
 		this.soundButton.addEventListener('click', (e) => {
 			e.preventDefault();
 			this.toggleSound();
 		});
 
-		// Обробники стрілок для зміни ставки
-		this.arrowButtons.forEach((button) => {
-			button.addEventListener('click', (e) => {
+		// Обробники кнопок ставки
+		if (this.minusButton) {
+			this.minusButton.addEventListener('click', (e) => {
 				e.preventDefault();
-				if (button.classList.contains('bottom')) {
-					this.decreaseBet();
-				} else {
-					this.increaseBet();
-				}
+				this.decreaseBet();
 			});
-		});
+		}
+
+		if (this.plusButton) {
+			this.plusButton.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.increaseBet();
+			});
+		}
 
 		// Оновлення при зміні розміру вікна
 		window.addEventListener('resize', () => {
@@ -708,7 +707,6 @@ class SlotMachine {
 	// Блокує кнопки спіну
 	disableSpinButtons() {
 		this.spinButton.classList.add('disabled');
-		this.autoButton.classList.add('disabled');
 		this.linesItems.forEach(item => item.classList.add('locked'));
 	}
 
@@ -719,7 +717,6 @@ class SlotMachine {
 		if (this.spinCount >= results.length) return;
 
 		this.spinButton.classList.remove('disabled');
-		this.autoButton.classList.remove('disabled');
 		this.linesItems.forEach(item => item.classList.remove('locked'));
 	}
 
@@ -748,10 +745,10 @@ class SlotMachine {
 	// Оновлення UI
 	updateUI() {
 		if (this.balanceElement) {
-			this.balanceElement.textContent = this.balance.toFixed(2);
+			this.balanceElement.textContent = '$' + this.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 		}
 		if (this.betElement) {
-			this.betElement.textContent = this.bet.toFixed(2);
+			this.betElement.textContent = '$' + this.bet.toFixed(2);
 		}
 	}
 
