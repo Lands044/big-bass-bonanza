@@ -454,11 +454,11 @@ $purple: #f8612a;
 	padding: 10px 0;
 	text-transform: uppercase;
 
-	@media (max-width: toEm($pc)) {
+	@media (max-width: toEm($pc)) and (pointer: coarse) {
 		height: auto;
 	}
 
-	@media (max-width: toEm($mobileSmall)) {
+	@media (max-width: toEm($mobileSmall)) and (pointer: coarse) {
 		height: 150px;
 	}
 
@@ -473,7 +473,7 @@ $purple: #f8612a;
 		justify-content: space-between;
 		height: 100%;
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			width: 100%;
 			flex-direction: column;
 		}
@@ -485,12 +485,12 @@ $purple: #f8612a;
 		justify-content: space-between;
 		gap: 20px;
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			width: 100%;
 			flex-direction: row-reverse;
 		}
 
-		@media (max-width: toEm($mobileSmall)) {
+		@media (max-width: toEm($mobileSmall)) and (pointer: coarse) {
 			align-items: flex-end;
 		}
 	}
@@ -505,15 +505,15 @@ $purple: #f8612a;
 		display: flex;
 		flex-direction: column;
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			flex-direction: row;
 		}
 
-		@media (max-width: toEm($mobile)) {
+		@media (max-width: toEm($mobile)) and (pointer: coarse) {
 			flex-direction: column;
 		}
 
-		@media (max-width: toEm($mobileSmall)) {
+		@media (max-width: toEm($mobileSmall)) and (pointer: coarse) {
 			flex-direction: row;
 		}
 	}
@@ -527,7 +527,7 @@ $purple: #f8612a;
 		transition: all 0.3s ease;
 		position: relative;
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			width: 60px;
 			height: 60px;
 		}
@@ -558,7 +558,7 @@ $purple: #f8612a;
 			object-fit: contain;
 		}
 
-		@media (max-width:toEm($mobile)){
+		@media (max-width:toEm($mobile)) and (pointer: coarse) {
 			width: 90px;
 			height: 90px;
 		}
@@ -650,7 +650,7 @@ $purple: #f8612a;
 		font-size: 20px;
 		line-height: 120%;
 
-		@media (max-width: toEm($mobile)) {
+		@media (max-width: toEm($mobile)) and (pointer: coarse) {
 			grid-template-columns: 1fr;
 			gap: 4px;
 		}
@@ -659,7 +659,7 @@ $purple: #f8612a;
 			text-align: right;
 			color: yellow;
 
-			@media (max-width: toEm($mobile)) {
+			@media (max-width: toEm($mobile)) and (pointer: coarse) {
 				text-align: left;
 			}
 		}
@@ -671,7 +671,7 @@ $purple: #f8612a;
 	}
 
 	&__bet {
-		@media (max-width: toEm($mobile)) {
+		@media (max-width: toEm($mobile)) and (pointer: coarse) {
 			margin-top: 15px;
 		}
 	}
@@ -681,7 +681,7 @@ $purple: #f8612a;
 		font-weight: 700;
 		line-height: 120%;
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			display: none;
 		}
 	}
@@ -703,23 +703,23 @@ $purple: #f8612a;
 			display: inline-block;
 		}
 
-		@media (max-width: toEm($pc)) {
+		@media (max-width: toEm($pc)) and (pointer: coarse) {
 			position: absolute;
 			top: -135%;
 			right: 3%;
 		}
 
-		@media (max-width: toEm($tablet)) {
+		@media (max-width: toEm($tablet)) and (pointer: coarse) {
 			right: 3%;
 			top: -135%;
 		}
 
-		@media (max-width: toEm($mobile)) {
+		@media (max-width: toEm($mobile)) and (pointer: coarse) {
 			top: -20%;
 			gap: 5px;
 		}
 
-		@media (max-width: toEm($mobileSmall)) {
+		@media (max-width: toEm($mobileSmall)) and (pointer: coarse) {
 			right: 15px;
 		}
 	}
@@ -731,7 +731,7 @@ $purple: #f8612a;
 		border-radius: 50%;
 		overflow: hidden;
 
-		@media (max-width: toEm($mobile)) {
+		@media (max-width: toEm($mobile)) and (pointer: coarse) {
 			width: 60px;
 			height: 60px;
 		}
