@@ -436,7 +436,7 @@ class SlotMachine {
 		strip.classList.add('active');
 
 		// Запускаємо анімацію — швидкий старт, гальмування з overshoot (проліт і повернення)
-		strip.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.6, 0.35, 1.2)`;
+		strip.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.6, 0.35, 1.1)`;
 		strip.style.transform = `translateY(-${finalOffset}px)`;
 
 		// Видаляємо blur ефект перед зупинкою
@@ -487,18 +487,26 @@ class SlotMachine {
 		if (result.type === 'bigwin') {
 			this.playSound('win');
 			this.drumSpinner.classList.add('bigwin-animation');
-			this.createWinEffects();
 
-			// Малюємо виграшну лінію
-			if (result.winLine) {
-				this.drawWinLine(result.winLine);
-			}
+			// Більше флешів для bigwin
+			this.createWinEffects(24);
+
+			// Показуємо "BIG WIN!" текст
+			this.showBigWinText();
+
+			// Малюємо виграшну лінію з невеликою затримкою
+			setTimeout(() => {
+				if (result.winLine) {
+					this.drawWinLine(result.winLine);
+				}
+			}, 300);
 
 			setTimeout(() => {
 				this.drumSpinner.classList.remove('bigwin-animation');
+				this.removeBigWinText();
 				this.removeWinLine();
 				this.enableSpinButtons();
-			}, 2000);
+			}, 3000);
 
 		} else if (result.type === 'smallwin') {
 			this.playSound('win');
@@ -651,8 +659,8 @@ class SlotMachine {
 	}
 
 	// Ефекти виграшу
-	createWinEffects() {
-		for (let i = 0; i < 12; i++) {
+	createWinEffects(count = 12) {
+		for (let i = 0; i < count; i++) {
 			setTimeout(() => {
 				const flash = document.createElement('div');
 				flash.className = 'win-flash';
@@ -661,7 +669,26 @@ class SlotMachine {
 				this.drumSpinner.appendChild(flash);
 
 				setTimeout(() => flash.remove(), 600);
-			}, i * 115);
+			}, i * 100);
+		}
+	}
+
+	// Показує "BIG WIN!" текст поверх барабанів
+	showBigWinText() {
+		const el = document.createElement('div');
+		el.className = 'bigwin-text';
+		el.textContent = 'BIG WIN!';
+		this.drumSpinner.appendChild(el);
+
+		setTimeout(() => el.classList.add('visible'), 50);
+	}
+
+	// Видаляє "BIG WIN!" текст
+	removeBigWinText() {
+		const el = this.drumSpinner.querySelector('.bigwin-text');
+		if (el) {
+			el.classList.remove('visible');
+			setTimeout(() => el.remove(), 400);
 		}
 	}
 
