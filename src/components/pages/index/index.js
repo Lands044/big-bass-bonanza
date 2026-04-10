@@ -60,7 +60,7 @@ class SlotMachine {
 
 		// Звуки
 		this.sounds = {
-			spin: new Audio('@sound/spin.mp3'),
+			spin: new Audio('@sound/'),
 			win: new Audio('@sound/win2.mp3'),
 			select: new Audio('@sound/select.ogg')
 		};
@@ -264,16 +264,7 @@ class SlotMachine {
 			// Випадкове зміщення для кожної колонки
 			const randomOffset = Math.floor(Math.random() * this.icons);
 
-			// Генеруємо випадкові іконки для стрічки
-			for (let i = 0; i < this.iconsPerReel; i++) {
-				const iconNum = ((i + randomOffset) % this.icons) + 1;
-				const icon = document.createElement('div');
-				icon.className = 'drum__image';
-				icon.innerHTML = `<img src="@img/icon/icon-${iconNum}.png" alt="Icon ${iconNum}">`;
-				strip.appendChild(icon);
-			}
-
-			// Додаємо predefined комбінації в кінець стрічки
+			// Додаємо predefined комбінації на початок стрічки
 			const results = this.getResultsForCurrentBreakpoint();
 			results.forEach((result) => {
 				const columnIcons = result.result[colIndex];
@@ -286,6 +277,15 @@ class SlotMachine {
 					});
 				}
 			});
+
+			// Генеруємо випадкові іконки для стрічки після predefined
+			for (let i = 0; i < this.iconsPerReel; i++) {
+				const iconNum = ((i + randomOffset) % this.icons) + 1;
+				const icon = document.createElement('div');
+				icon.className = 'drum__image';
+				icon.innerHTML = `<img src="@img/icon/icon-${iconNum}.png" alt="Icon ${iconNum}">`;
+				strip.appendChild(icon);
+			}
 
 			column.appendChild(strip);
 			this.drumSpinner.appendChild(column);
@@ -308,12 +308,15 @@ class SlotMachine {
 	initializePositions() {
 		const columns = this.drumSpinner.querySelectorAll('.drum__column');
 		const iconHeight = this.getIconHeight();
+		// Кількість predefined іконок на початку стрічки (щоб не показувати їх одразу)
+		const results = this.getResultsForCurrentBreakpoint();
+		const predefinedCount = results.reduce((sum, r) => sum + (r.result[0] ? r.result[0].length : 0), 0);
 
 		columns.forEach((column) => {
 			const strip = column.querySelector('.drum__strip');
-			// Початкова позиція - показуємо перші іконки
+			// Початкова позиція — після predefined блоку + випадковий зсув
 			const randomOffset = Math.floor(Math.random() * this.icons) * iconHeight;
-			strip.style.transform = `translateY(-${randomOffset}px)`;
+			strip.style.transform = `translateY(-${predefinedCount * iconHeight + randomOffset}px)`;
 		});
 	}
 
@@ -386,14 +389,15 @@ class SlotMachine {
 	async spin(result) {
 		const columns = this.drumSpinner.querySelectorAll('.drum__column');
 		const duration = 3000;
+		const colDelay = 250;
 
-		// Запускаємо анімацію кожної колонки з затримкою
+		// Перша колонка стартує першою і зупиняється першою
 		const spinPromises = Array.from(columns).map((column, colIndex) => {
 			return new Promise((resolve) => {
 				setTimeout(() => {
-					this.spinColumn(column, result.result[colIndex], duration, colIndex);
-					setTimeout(resolve, duration + (colIndex * 100));
-				}, colIndex * 100);
+					this.spinColumn(column, result.result[colIndex], duration);
+					setTimeout(resolve, duration);
+				}, colIndex * colDelay);
 			});
 		});
 
@@ -401,12 +405,11 @@ class SlotMachine {
 	}
 
 	// Анімація обертання однієї колонки
-	spinColumn(column, targetIcons, duration, colIndex) {
+	spinColumn(column, targetIcons, duration) {
 		const strip = column.querySelector('.drum__strip');
 		const iconHeight = this.getIconHeight();
-		const rows = this.config.rows;
 
-		// Знаходимо позицію потрібної послідовності в стрічці
+		// Знаходимо позицію потрібної послідовності в стрічці (з початку, де predefined)
 		const targetPosition = this.findSequencePosition(strip, targetIcons);
 
 		if (targetPosition === -1) {
@@ -414,9 +417,17 @@ class SlotMachine {
 			return;
 		}
 
-		// Скидаємо до початкової позиції
+		// Фінальна позиція — показати потрібні іконки
+		const finalOffset = targetPosition * iconHeight;
+
+		// Стартова позиція — після фінальної в стрічці (більший offset)
+		// Стрічка рухатиметься від більшого до меншого translateY = вгору = іконки летять вниз
+		const extraScroll = iconHeight * 20;
+		const startOffset = finalOffset + extraScroll;
+
+		// Скидаємо до стартової позиції
 		strip.style.transition = 'none';
-		strip.style.transform = 'translateY(0)';
+		strip.style.transform = `translateY(-${startOffset}px)`;
 
 		// Примусовий reflow
 		strip.offsetHeight;
@@ -424,14 +435,11 @@ class SlotMachine {
 		// Додаємо blur ефект на початку обертання
 		strip.classList.add('active');
 
-		// Фінальна позиція - показати потрібні іконки
-		const finalOffset = targetPosition * iconHeight;
-
-		// Запускаємо анімацію з плавним сповільненням
-		strip.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.1, 0.25, 1)`;
+		// Запускаємо анімацію — швидкий старт, гальмування з overshoot (проліт і повернення)
+		strip.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.6, 0.55, 1.2)`;
 		strip.style.transform = `translateY(-${finalOffset}px)`;
 
-		// Видаляємо blur ефект перед зупинкою (за 500ms до кінця)
+		// Видаляємо blur ефект перед зупинкою
 		setTimeout(() => {
 			strip.classList.remove('active');
 		}, duration - 250);
@@ -441,8 +449,8 @@ class SlotMachine {
 	findSequencePosition(strip, targetIcons) {
 		const icons = strip.querySelectorAll('.drum__image img');
 
-		// Шукаємо з кінця стрічки (там predefined комбінації)
-		for (let i = icons.length - targetIcons.length; i >= 0; i--) {
+		// Шукаємо з початку стрічки (там predefined комбінації)
+		for (let i = 0; i <= icons.length - targetIcons.length; i++) {
 			let found = true;
 
 			for (let j = 0; j < targetIcons.length; j++) {
