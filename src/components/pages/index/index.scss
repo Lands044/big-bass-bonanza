@@ -55,9 +55,9 @@ $button-popup: #fdc909;
 	display: flex;
 	align-items: center;
 
-	@media (max-width:toEm($mobile)) and (pointer: coarse) {
-		align-items: flex-start;
-	}
+	// @media (max-width:toEm($mobile)) and (pointer: coarse) {
+	// 	align-items: flex-start;
+	// }
 
 	&__container {
 		display: flex;
@@ -66,7 +66,8 @@ $button-popup: #fdc909;
 		height: 100%;
 
 		@media (max-width:toEm($mobile)) and (pointer: coarse){
-			padding-top: 100px;
+			// padding-top: 100px;
+			padding-bottom: 80px;
 			flex-direction: column;
 		}
 	}
@@ -222,7 +223,7 @@ $button-popup: #fdc909;
 		}
 
 		@media (max-width: toEm($mobileSmall)) and (max-height: toEm(800)) and (pointer: coarse) {
-			height: calc(105px * 3) !important;
+			height: calc(115px * 3) !important;
 		}
 	}
 
@@ -253,11 +254,10 @@ $button-popup: #fdc909;
 
 		@media (max-width:toEm($mobile)) and (pointer: coarse){
 			height: 140px;
-			padding: 10px;
 		}
 
 		@media (max-width: toEm($mobileSmall)) and (max-height: toEm(800)) and (pointer: coarse) {
-			height: 105px !important;
+			height: 115px !important;
 		}
 
 		img {

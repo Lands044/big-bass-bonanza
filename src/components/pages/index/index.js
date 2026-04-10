@@ -51,7 +51,7 @@ class SlotMachine {
 				minWidth: 0,
 				cols: 3,
 				rows: 3,
-				iconHeight: 105
+				iconHeight: 115
 			}
 		};
 
@@ -185,7 +185,7 @@ class SlotMachine {
 		const breakpoint = this.getCurrentBreakpoint();
 		const config = { ...this.breakpoints[breakpoint], breakpoint };
 		if (breakpoint === 'desktop' && window.innerHeight <= 800) {
-			config.iconHeight = 110;
+			config.iconHeight = 115;
 		}
 		return config;
 	}
@@ -653,7 +653,7 @@ class SlotMachine {
 				this.drumSpinner.appendChild(flash);
 
 				setTimeout(() => flash.remove(), 600);
-			}, i * 105);
+			}, i * 115);
 		}
 	}
 
